@@ -6,26 +6,33 @@ jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout code (with cache clear)
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          clean: true
+          ref: main
           
       - name: Show git log
-        run: git log --oneline -5
+        run: git log --oneline -3
         
-      - name: Display main.py
-        run: cat main.py
+      - name: Display main.py content
+        run: |
+          echo "=== main.py content ==="
+          head -20 main.py
+          echo "=== End of main.py ==="
           
-      - name: Set up Python
+      - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           
-      - name: Install Dependencies
+      - name: Clear pip cache
+        run: pip cache purge
+        
+      - name: Install Dependencies fresh
         run: |
-          python -m pip install --upgrade pip
-          pip install telethon cryptg
+          pip install --no-cache-dir --upgrade telethon cryptg
         
       - name: Run Bot
         env:
