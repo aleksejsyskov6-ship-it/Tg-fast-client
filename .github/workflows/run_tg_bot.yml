@@ -1,24 +1,32 @@
 name: 'Run TG Client'
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 * * * *'
 
 jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          clean: true
+          
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-      - name: Debug - Check main.py
-        run: cat main.py
+          python-version: '3.10'
+          cache: 'pip'
+          
+      - name: Debug - Show main.py content
+        run: |
+          echo "=== Content of main.py ==="
+          head -n 10 main.py
+          echo "=== End of main.py ==="
+          
       - name: Install Dependencies
-        run: pip install --upgrade telethon cryptg
+        run: pip install --upgrade --force-reinstall telethon cryptg
+        
       - name: Run Bot
         env:
           API_ID: ${{ secrets.API_ID }}
