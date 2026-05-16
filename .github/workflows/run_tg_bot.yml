@@ -1,6 +1,8 @@
 name: 'Run TG Client'
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 * * * *'
 
 jobs:
   run:
@@ -8,11 +10,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: main
+          fetch-depth: 0
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Debug - Check main.py
+        run: cat main.py
       - name: Install Dependencies
         run: pip install --upgrade telethon cryptg
       - name: Run Bot
