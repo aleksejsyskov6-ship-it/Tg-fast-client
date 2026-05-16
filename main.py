@@ -1,6 +1,5 @@
 import os
 from telethon import TelegramClient
-from telethon.network import ConnectionTcpMTProxyWS
 import asyncio
 
 # Загружаем секретные переменные
@@ -8,16 +7,15 @@ API_ID = int(os.environ.get('API_ID'))
 API_HASH = os.environ.get('API_HASH')
 
 async def main():
-    # Создаём клиента с WebSocket (чтобы летал)
+    # Создаём клиента
     client = TelegramClient(
         'session', 
         API_ID, 
-        API_HASH,
-        connection=ConnectionTcpMTProxyWS
+        API_HASH
     )
     
     await client.start()
-    print("🚀 Клиент успешно запущен через WebSocket!")
+    print("🚀 Клиент успешно запущен!")
     
     me = await client.get_me()
     print(f"Имя: {me.first_name}")
